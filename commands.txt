@@ -1,0 +1,72 @@
+#Import all models
+from portal.models import *
+
+#1 Create 2 users
+
+User.objects.create(username='Ard', password='123', first_name='John', last_name='Smith', email='boxer@yandex.ru')
+User.objects.create(username='Brown', password='987', first_name='Jack', last_name='Doe', email='fox@gmail.com')
+
+#2 Create 2 authors, references to users
+
+Author.objects.create(user=User.objects.get(username='Ard'))
+Author.objects.create(user=User.objects.get(username='Brown'))
+
+#3 Create 4 categories
+
+Category.objects.create(category_name='Gossip')
+Category.objects.create(category_name='Policy')
+Category.objects.create(category_name='Technology')
+Category.objects.create(category_name='Bullet')
+
+#4 Create 2 articles and 1 news
+    
+Post.objects.create(post_author=Author(pk=1), post_choice='AR', post_title='Nobody is perfect', post_text='Nobody knows what modern society needs so dont try to fit all it need, ju
+st be yourself')
+Post.objects.create(post_author=Author(pk=2), post_choice='AR', post_title='So many news to read', post_text='Im tired of trying to find short new to put text here')
+Post.objects.create(post_author=Author(pk=3), post_choice='NE', post_title='Best sales', post_text='New Year sales are comming')
+
+#5 Categories to posts
+
+PostCategory.objects.create(post = Post.objects.get(pk=1), category = Category.objects.get(category_name='Gossip'))
+PostCategory.objects.create(post = Post.objects.get(pk=2), category = Category.objects.get(category_name='Policy'))
+PostCategory.objects.create(post = Post.objects.get(pk=3), category = Category.objects.get(category_name='Technology'))
+PostCategory.objects.create(post = Post.objects.get(pk=3), category = Category.objects.get(category_name='Bullet'))
+
+
+#6 Create 4 comments
+
+from datetime import datetime
+
+Comment.objects.create(comment_post=Post.objects.get(pk=2), comment_user=User.objects.get(username='Ard'), comment_text='Not very interesting!', comment_date = datetime.now())
+Comment.objects.create(comment_post=Post.objects.get(pk=3), comment_user=User.objects.get(username='Ard'), comment_text='Unfollowed. Dislike.',comment_date = datetime.now())
+Comment.objects.create(comment_post=Post.objects.get(pk=2), comment_user=User.objects.get(username='Brown'), comment_text='Good job, bro!',comment_date = datetime.now())
+Comment.objects.create(comment_post=Post.objects.get(pk=1), comment_user=User.objects.get(username='Brown'), comment_text='Where is it?',comment_date = datetime.now())
+
+#7 Apply functions like()/dislike()
+Comment.objects.get(pk=1).like()
+Comment.objects.get(pk=2).dislike()
+Comment.objects.get(pk=3).like()
+Comment.objects.get(pk=1).dislike()
+Post.objects.get(pk=2).like()
+Post.objects.get(pk=2).like()
+Post.objects.get(pk=2).like()
+Post.objects.get(pk=2).like()
+Post.objects.get(pk=3).dislike()
+Post.objects.get(pk=3).dislike()
+Post.objects.get(pk=2).like()
+Post.objects.get(pk=1).dislike()
+
+#8 Generate user`s rating
+Author.objects.get(pk=1).update_rating()
+Author.objects.get(pk=2).update_rating()
+
+#9 Output best author`s username and rating
+Author.objects.all().order_by('-author_rating').values('user', 'author_rating')[0]
+
+#10 Output publication data, username, rating, title and best article`s preview basic on likes and dislikes
+Post.objects.all().order_by('-post_rating').values('post_date', 'post_author', 'post_rating', 'post_title')[0]
+Post.objects.all().order_by('-post_rating')[0]
+
+
+#11 Output all comments (data, user, rating, text) to best article
+Comment.objects.filter(comment_post=Post.objects.all().order_by('-post_rating')[0]).values('comment_date', 'comment_user', 'comment_rating', 'comment_text')
