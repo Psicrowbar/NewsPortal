@@ -1,4 +1,4 @@
-"""news URL Configuration
+"""NewsPaper URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
@@ -14,8 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('pages/', include('django.contrib.flatpages.urls')),
+# Делаем так, чтобы все адреса из нашего приложения (simpleapp/urls.py)
+   # подключались к главному приложению с префиксом products/.
+   path('products/', include('portal.urls')),
 ]

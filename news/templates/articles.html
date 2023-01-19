@@ -1,0 +1,40 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% load custom_tags %}
+{% block title %}
+Products
+{% endblock title %}
+
+{% block content %}
+   <h1>Всего статей {{ products|length }} </h1>
+
+   <!-- Используем переданную из представления переменную time_now
+   и применяем к ней фильтр date. По назначению этот фильтр очень похож
+   на метод strftime у объекта datetime в Python — вывод времени
+   в указанном формате. -->
+   <h3>Сегодня {% current_time '%b %d %Y' %}</h3>
+
+   <hr>
+   {% if products %}
+       <table>
+           <tr>
+               <td>Название</td>
+               <td>Дата публикации</td>
+               <td>Рейтинг</td>
+               <td>Содержание</td>
+           </tr>
+
+           {% for product in products %}
+           <tr>
+               <td>{{ product.post_title }}</td>
+               <td>{{ product.post_date }}</td>
+               <td>{{ product.post_rating }}</td>
+               <td>{{ product.post_text|censor }}</td>
+           </tr>
+           {% endfor %}
+
+       </table>
+   {% else %}
+       <h2>Статей нет!</h2>
+   {% endif %}
+{% endblock content %}

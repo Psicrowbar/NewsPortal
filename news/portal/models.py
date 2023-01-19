@@ -3,7 +3,6 @@ from django.db import models
 
 from django.contrib.auth.models import User
 
-
 arcticle = 'AR'
 news = 'NW'
 
@@ -25,9 +24,13 @@ class Author(models.Model):
             self.author_rating += comment
         self.save()
 
-
+    def username(self):
+        return self.user.username
 class Category(models.Model):
     category_name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.category_name.title()
 
 
 class Post(models.Model):
@@ -58,6 +61,8 @@ class PostCategory(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.category.title()
 
 class Comment(models.Model):
     comment_post = models.ForeignKey('Post', on_delete=models.CASCADE)
