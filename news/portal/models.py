@@ -1,6 +1,6 @@
 from django.db import models
 from django.db import models
-
+from django.urls import reverse
 from django.contrib.auth.models import User
 
 arcticle = 'AR'
@@ -55,7 +55,8 @@ class Post(models.Model):
     def dislike(self, amount=1):
         self.post_rating -= amount
         self.save()
-
+    def get_absolute_url(self):
+        return reverse('product_detail', args=[str(self.id)])
 
 class PostCategory(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)

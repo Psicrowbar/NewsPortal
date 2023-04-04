@@ -1,22 +1,46 @@
 <--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
-
+{% load custom_filters %}
+{% load custom_tags %}
 <!-- Название у нас будет products -->
 {% block title %}
-Products
+Posts
 {% endblock title %}
 
 <!-- В контенте на странице мы выводим все товары -->
 {% block content %}
-   <h1>Детализация статьи</h1>
-   <!-- Выводим товары, только если они есть с помощью тега if -->
-   {% if product %}
-        <h2>Название статьи : {{ product.post_title }}</h2>
-        <h2>Дата публикации : {{ product.post_date }}</h2>
-        <h2>{{ product.post_text }}</h2>
-        <h2>Рейтинг: {{ product.post_rating }}</h2>
-   {% else %}
-       <!-- Если товаров нет, говорим, что товаров нет ;) -->
-       <h2>Статей с такой ссылкой нет!</h2>
-   {% endif %}
-{% endblock content %}
+   <h1>{{ post_detail.post_title|censor }}</h1>
+    <hr>
+    {% if post_detail %}
+        <table>
+            <tr>
+                <td>заголовок</td>
+                <td>дата публикации</td>
+                <td>содержание</td>
+                 <td>действия</td>
+            </tr>
+            <tr>
+                <td>______________</td>
+                <td>______________</td>
+                <td>______________</td>
+                <td>______________</td>
+            </tr>
+            <tr>
+            <td>{{ post_detail.post_title|censor}}</td>
+            <td>{{ post_detail.post_date|date:'d M Y'}}</td>
+            <td>{{ post_detail.post_text|censor}}</td>
+             <td>
+            <a href="{% url 'post_edit' post_detail.id %}"><u>Редактировать</u></a> <!--ссылка на редактирование поста-->
+            <a href="{% url 'post_delete' post_detail.id %}"><u> Удалить </u></a> <!-- ссылка на удаление поста-->
+            </td>
+        </tr>
+        </table>
+    {% else %}
+        <h2>упс! её нет!</h2>
+    {% endif %}
+    {% endblock content %}
+</head>
+<body>
+
+</body>
+</html>

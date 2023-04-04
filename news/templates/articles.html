@@ -1,40 +1,56 @@
-{% extends 'flatpages/default.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% extends 'flatpages/default.html' %}</title>
+</head>
+
 {% load custom_filters %}
 {% load custom_tags %}
+
 {% block title %}
-Products
+Post
 {% endblock title %}
 
 {% block content %}
-   <h1>Всего статей {{ products|length }} </h1>
+<body>
+<h1>Все новости ({{ post_news.count}})</h1>
+<h3>{% current_time '%d %b %Y' %}</h3>
+<h3> {{ next_sale|default_if_none:"Чуть позже сообщим о более свежих новостях!" }}</h3>
 
-   <!-- Используем переданную из представления переменную time_now
-   и применяем к ней фильтр date. По назначению этот фильтр очень похож
-   на метод strftime у объекта datetime в Python — вывод времени
-   в указанном формате. -->
-   <h3>Сегодня {% current_time '%b %d %Y' %}</h3>
+<hr>
+{% if post_news %}
+    <table>
+        <thead>
+        <tr>
+            <th>заголовок</th>
+            <th>дата публикации</th>
+            <th>текст</th>
+            <th>действия</th>
+        </tr>
+        {% for post in filter.qs %}
+        <tr>
+            <td>
+            <a href="{% url 'post_detail' post.id %}">{{ post.post_title }}</a> <!-- ссылка на сам пост -->
+            </td>
+            <td>
+            {{ post.post_date|date:'d M Y'}} <!--дата публикации-->
+            </td>
+            <td>
+            {{ post.post_text|censor|truncatechars:20}} <!--текст публикации-->
+            </td>
+            <td>
+            <a href="{% url 'post_edit' post.id %}"><u>Редактировать</u></a> <!--ссылка на редактирование поста-->
+            <a href="{% url 'post_delete' post.id %}"><u> Удалить </u></a> <!-- добавим ссылку на удаление поста-->
+            </td>
+        </tr>
 
-   <hr>
-   {% if products %}
-       <table>
-           <tr>
-               <td>Название</td>
-               <td>Дата публикации</td>
-               <td>Рейтинг</td>
-               <td>Содержание</td>
-           </tr>
-
-           {% for product in products %}
-           <tr>
-               <td>{{ product.post_title }}</td>
-               <td>{{ product.post_date }}</td>
-               <td>{{ product.post_rating }}</td>
-               <td>{{ product.post_text|censor }}</td>
-           </tr>
-           {% endfor %}
-
-       </table>
-   {% else %}
-       <h2>Статей нет!</h2>
-   {% endif %}
+        {% endfor %}
+        </thead>
+    </table>
+{% else %}
+    <h2>новостей нет!</h2>
+{% endif %}
 {% endblock content %}
+</body>
+</html>
