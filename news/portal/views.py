@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def upgrade_me(request):
-    Author.objects.create(user=request.user)
+    Author.objects.get_or_create(user=request.user)
     authors_group = Group.objects.get(name='premium')
     if not request.user.groups.filter(name='premium').exists():
         authors_group.user_set.add(request.user)
