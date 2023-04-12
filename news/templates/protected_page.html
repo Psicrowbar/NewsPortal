@@ -1,0 +1,18 @@
+<--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% load custom_tags %}
+<!-- Название у нас будет products -->
+{% block title %}
+Posts Protected
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все товары -->
+{% block content %}
+
+{% endblock content %}
+</head>
+<body>
+
+</body>
+</html>

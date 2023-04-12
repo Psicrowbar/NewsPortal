@@ -1,9 +1,25 @@
-from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
-from .models import Post, PostCategory
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView
+from .models import Post, PostCategory,BaseRegisterForm, Author
 from .forms import ProductForm
 from .filters import PostFilter
+from django.views.generic import TemplateView
+from django.contrib.auth.models import User, Group
+from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
+def upgrade_me(request):
+    Author.objects.create(user=request.user)
+    authors_group = Group.objects.get(name='premium')
+    if not request.user.groups.filter(name='premium').exists():
+        authors_group.user_set.add(request.user)
+    return redirect('/news/')
+class ProtectedView(LoginRequiredMixin, TemplateView):
+
+    template_name = 'protected_page.html'
 class PostList(ListView):
     model = Post
     ordering = 'post_date'
@@ -27,19 +43,19 @@ class PostList(ListView):
         return super().get(request, *args, **kwargs)
 
 
-class PostDetail(DetailView):
+class PostDetail(LoginRequiredMixin,DetailView):
     model = Post
     template_name = 'article.html'
     context_object_name = 'post_detail'
     queryset = Post.objects.all()
 
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin,CreateView):
     template_name = 'article_add.html'
     form_class = ProductForm
     success_url = '/products/'
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin,UpdateView):
     template_name = 'article_edit.html'
     form_class = ProductForm
     success_url = '/products/'
@@ -72,4 +88,17 @@ class PostSearch(ListView):   #поиск поста
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
+        return context
+
+
+class BaseRegisterView(CreateView):
+    model = User
+    form_class = BaseRegisterForm
+    success_url = '/'
+class IndexView(LoginRequiredMixin, TemplateView):
+    template_name = 'protect/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_premium'] = not self.request.user.groups.filter(name='premium').exists()
         return context
