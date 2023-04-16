@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from .views import (
     PostList, PostDetail, PostCreateView, PostUpdateView, PostDeleteView,PostSearch,BaseRegisterView
 )
+from .views import  CategoryListView, subscribe, unsubscribe
 from django.contrib.auth.views import LoginView, LogoutView
 from .views import upgrade_me
 from .views import IndexView
@@ -35,4 +36,7 @@ urlpatterns = [
         name='signup'),
    path('upgrade/', upgrade_me, name='upgrade'),
    path('', IndexView.as_view()),
+   path('categories/<int:pk>', CategoryListView.as_view(), name='category_list'),
+   path('categories/<int:pk>/subscribe', subscribe, name='subscribe'),
+   path('categories/<int:pk>/unsubscribe', unsubscribe, name='unsubscribe'),
 ]
