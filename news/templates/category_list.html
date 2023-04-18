@@ -5,7 +5,7 @@
     <title>{% extends 'flatpages/default.html' %}</title>
 </head>
 
-{% load censor %}
+{% load custom_filters %}
 {% load custom_tags %}
 
 {% block title %}
@@ -14,7 +14,7 @@ Post
 
 {% block content %}
 <body>
-<h1>Все новости ({{ post_news.count}})</h1>
+<h1>Все новости ({{ category_news_list.count}})</h1>
 <h3>{% current_time '%d %b %Y' %}</h3>
 <h3> {{ next_sale|default_if_none:"Вы будете получать новости регулярно!" }}</h3>
 <hr>
@@ -26,25 +26,24 @@ Post
             <td>категория</td>
             <th>дата публикации</th>
             <th>заголовок</th>
-            <th>действие</th>
             <th>текст</th>
         </tr>
         {% for post in category_news_list %}
         <tr>
         <td>
-            <a href="{% url 'post_detail' post.id %}">{{ post.post_title|title }}</a> <!-- ссылка на сам пост -->
-        <td>
-            {% for category in post.post_category.all %}
-                <a href="{% url 'category_list' category.id %}">{{ post_category }}</a>
+             {% for category in post.post_category.all %}
+                <a href="{% url 'category_list' category.id %}">{{ post.post_category }}</a>
             {% endfor %}
-        <td>{{ post.date_in|date:'d M Y'}}</td>
-        <td><a href="{% url 'post_detail' post.id %}">{{ post.post_title|censor}}</a></td>
-        </td>
-        <td>
-            <a href="{% url 'post_edit' post.id %}"style="background-color:#ffffa1"><u>Редактировать</u></a> <!--ссылка на редактирование поста-->
 
-            <a href="{% url 'post_delete' post.id %}"style="color:red"><u> Удалить </u></a> <!-- добавим ссылку на удаление поста-->
+        <td>
+             {{ post.post_date|date:'d M Y'}}
+
+
+        <td>
+            <a href="{% url 'post_detail' post.id %}">{{ post.post_title|censor}}</a>
         </td>
+        </td>
+
         <td>{{ post.post_text|censor|truncatechars:20}}</td>
         </tr>
         {% endfor %}

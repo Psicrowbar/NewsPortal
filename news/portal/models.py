@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
+
 arcticle = 'AR'
 news = 'NW'
 
@@ -27,11 +28,36 @@ class Author(models.Model):
 
     def username(self):
         return self.user.username
+
+
 class Category(models.Model):
-    category_name = models.CharField(max_length=255, unique=True)
+
+    #category_name = models.CharField(max_length=255, unique=True)
+
+    gossip = 'GS'
+    policy = 'PO'
+    technology = 'TH'
+    bullet = 'BL'
+
+    TEMATIC = [
+        (gossip, 'СВЕТСКИЕ НОВОСТИ'),
+        (policy, 'ПОЛИТИКА'),
+        (technology, 'ТЕХНИКА'),
+        (bullet, 'СРОЧНЫЕ НОВОСТИ')
+    ]
+    thematic = models.CharField(max_length=2, choices=TEMATIC, unique=True,)
+    subscribers = models.ManyToManyField(User, blank=True, related_name='categories')
 
     def __str__(self):
-        return self.category_name.title()
+        return self.get_thematic_display()
+
+
+post = 'PO'
+news = 'NE'
+POST = [
+    (post, 'ПОСТ'),
+    (news, 'НОВОСТЬ')
+]
 
 
 class Post(models.Model):
@@ -56,8 +82,10 @@ class Post(models.Model):
     def dislike(self, amount=1):
         self.post_rating -= amount
         self.save()
+
     def get_absolute_url(self):
         return reverse('product_detail', args=[str(self.id)])
+
 
 class PostCategory(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
@@ -65,6 +93,7 @@ class PostCategory(models.Model):
 
     def __str__(self):
         return self.category.title()
+
 
 class Comment(models.Model):
     comment_post = models.ForeignKey('Post', on_delete=models.CASCADE)
@@ -94,4 +123,4 @@ class BaseRegisterForm(UserCreationForm):
                   "last_name",
                   "email",
                   "password1",
-                  "password2", )
+                  "password2",)
