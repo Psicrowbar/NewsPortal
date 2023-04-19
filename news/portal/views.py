@@ -51,14 +51,16 @@ class PostDetail(LoginRequiredMixin,DetailView):
 
 
 class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin,CreateView):
+    permission_required = ('portal.add.post')
     template_name = 'article_add.html'
     form_class = ProductForm
-    success_url = '/products/'
+    success_url = '/news/'
 
 class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin,UpdateView):
     template_name = 'article_edit.html'
+    permission_required = ('portal.update.post')
     form_class = ProductForm
-    success_url = '/products/'
+    success_url = '/news/'
     # метод get_object мы используем вместо queryset, чтобы получить информацию об объекте редактирования
     def get_object(self, **kwargs):
         id = self.kwargs.get('pk')

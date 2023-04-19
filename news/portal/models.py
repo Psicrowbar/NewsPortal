@@ -28,7 +28,8 @@ class Author(models.Model):
 
     def username(self):
         return self.user.username
-
+    def __str__(self):
+        return self.user.username
 
 class Category(models.Model):
 
@@ -91,8 +92,6 @@ class PostCategory(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.category.title()
 
 
 class Comment(models.Model):

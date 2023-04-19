@@ -10,7 +10,7 @@ from django.core.management.base import BaseCommand
 from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 
-from news.portal.models import Post, Category
+from ... models import Post, Category
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ def my_job():
     today = datetime.datetime.now()
     last_week = today - datetime.timedelta(days=7)
     posts = Post.objects.filter(post_date__gte=last_week)
-    categories = set(posts.values_list('category_name', flat=True))
+    categories = set(posts.values_list('thematic', flat=True))
     subscribers = set(Category.objects.filter(name__in=categories).values_list('subscribers__email', flat=True))
 
     html_content = render_to_string(
