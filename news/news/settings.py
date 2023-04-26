@@ -118,6 +118,13 @@ EMAIL_HOST_USER = os.getenv('crowtestmail')  # ваше имя пользова�
 EMAIL_HOST_PASSWORD = os.getenv('Newpass1397')  # пароль от почты
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+
+CELERY_BROKER_URL = 'redis-13204.c293.eu-central-1-1.ec2.cloud.redislabs.com:13204'
+CELERY_RESULT_BACKEND = 'redis-13204.c293.eu-central-1-1.ec2.cloud.redislabs.com:13204'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
