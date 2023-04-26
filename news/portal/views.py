@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 
 from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib.auth.decorators import login_required
-
+from .tasks import send_email_task
 @login_required
 def upgrade_me(request):
     Author.objects.get_or_create(user=request.user)
@@ -56,6 +56,11 @@ class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin,CreateView):
     form_class = ProductForm
     success_url = '/news/'
 
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.save()
+        send_email_task.delay(post.pk)
+        return super().form_valid(form)
 class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin,UpdateView):
     template_name = 'article_edit.html'
     permission_required = ('portal.update.post')
