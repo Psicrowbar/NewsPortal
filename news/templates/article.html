@@ -2,6 +2,9 @@
 {% extends 'flatpages/default.html' %}
 {% load custom_filters %}
 {% load custom_tags %}
+{% load cache %}
+
+{% cache 300 article %}
 <!-- Название у нас будет products -->
 {% block title %}
 Posts
@@ -39,6 +42,7 @@ Posts
         <h2>упс! её нет!</h2>
     {% endif %}
     {% endblock content %}
+    {% endcache %}
 </head>
 <body>
 
