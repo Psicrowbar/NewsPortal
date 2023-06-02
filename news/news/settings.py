@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import logging
 import logging.config
+#Здесь при добавлении dotend не загружается метод load_dotenv
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -185,7 +186,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 13
 SITE_URL = 'http://127.0.0.1:8000'
-
+#НАСТРОЙКА ЛОГОВ , САМИ ЛОГИ ЛЕЖАТ В ПАПКЕ news/logs
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
