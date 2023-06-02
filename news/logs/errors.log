@@ -1,0 +1,114 @@
+2023-06-02 21:33:53 [ERROR] C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\django\utils\log.py:241 - Internal Server Error: /news/create/
+Traceback (most recent call last):
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\connection.py", line 698, in connect
+    sock = self.retry.call_with_retry(
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\retry.py", line 46, in call_with_retry
+    return do()
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\connection.py", line 699, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\connection.py", line 955, in _connect
+    for res in socket.getaddrinfo(
+  File "C:\Users\user\AppData\Local\Programs\Python\Python38-32\lib\socket.py", line 918, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\celery\backends\redis.py", line 119, in reconnect_on_error
+    yield
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\celery\backends\redis.py", line 169, in _consume_from
+    self._pubsub.subscribe(key)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\client.py", line 1623, in subscribe
+    ret_val = self.execute_command("SUBSCRIBE", *new_channels.keys())
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\client.py", line 1458, in execute_command
+    self.connection = self.connection_pool.get_connection(
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\connection.py", line 1442, in get_connection
+    connection.connect()
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\connection.py", line 704, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to redis-13204.c293.eu-central-1-1.ec2.cloud.redislabs.com:13204. getaddrinfo failed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\connection.py", line 698, in connect
+    sock = self.retry.call_with_retry(
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\retry.py", line 46, in call_with_retry
+    return do()
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\connection.py", line 699, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\connection.py", line 955, in _connect
+    for res in socket.getaddrinfo(
+  File "C:\Users\user\AppData\Local\Programs\Python\Python38-32\lib\socket.py", line 918, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\kombu\connection.py", line 446, in _reraise_as_library_errors
+    yield
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\celery\app\base.py", line 787, in send_task
+    self.backend.on_task_call(P, task_id)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\celery\backends\redis.py", line 365, in on_task_call
+    self.result_consumer.consume_from(task_id)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\celery\backends\redis.py", line 161, in consume_from
+    return self.start(task_id)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\celery\backends\redis.py", line 139, in start
+    self._consume_from(initial_task_id)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\celery\backends\redis.py", line 169, in _consume_from
+    self._pubsub.subscribe(key)
+  File "C:\Users\user\AppData\Local\Programs\Python\Python38-32\lib\contextlib.py", line 131, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\celery\backends\redis.py", line 122, in reconnect_on_error
+    self._ensure(self._reconnect_pubsub, ())
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\celery\backends\redis.py", line 376, in ensure
+    return retry_over_time(
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\kombu\utils\functional.py", line 312, in retry_over_time
+    return fun(*args, **kwargs)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\celery\backends\redis.py", line 106, in _reconnect_pubsub
+    metas = self.backend.client.mget(self.subscribed_to)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\commands\core.py", line 1976, in mget
+    return self.execute_command("MGET", *args, **options)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\client.py", line 1255, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\connection.py", line 1442, in get_connection
+    connection.connect()
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\redis\connection.py", line 704, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to redis-13204.c293.eu-central-1-1.ec2.cloud.redislabs.com:13204. getaddrinfo failed.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\django\contrib\auth\mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\django\views\generic\edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\django\views\generic\edit.py", line 153, in post
+    return self.form_valid(form)
+  File "C:\Users\user\PycharmProjects\NewsPortal\news\portal\views.py", line 72, in form_valid
+    send_email_task.delay(post.pk)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\celery\app\task.py", line 425, in delay
+    return self.apply_async(args, kwargs)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\celery\app\task.py", line 575, in apply_async
+    return app.send_task(
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\celery\app\base.py", line 788, in send_task
+    amqp.send_task_message(P, name, message, **options)
+  File "C:\Users\user\AppData\Local\Programs\Python\Python38-32\lib\contextlib.py", line 131, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\kombu\connection.py", line 450, in _reraise_as_library_errors
+    raise ConnectionError(str(exc)) from exc
+kombu.exceptions.OperationalError: Error 11001 connecting to redis-13204.c293.eu-central-1-1.ec2.cloud.redislabs.com:13204. getaddrinfo failed.
+2023-06-02 21:33:53 [ERROR] C:\Users\user\PycharmProjects\NewsPortal\venv\lib\site-packages\django\core\servers\basehttp.py:187 - "POST /news/create/ HTTP/1.1" 500 270591

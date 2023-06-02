@@ -14,9 +14,9 @@ from pathlib import Path
 import logging
 import logging.config
 #Здесь при добавлении dotend не загружается метод load_dotenv
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
-load_dotenv()
+#load_dotenv()
 
 
 from django.conf import settings
@@ -198,13 +198,24 @@ LOGGING = {
             '()': 'django.utils.log.RequireDebugFalse',
         },
     },
+
     'handlers': {
+        "В консоль должны выводиться все сообщения уровня DEBUG и выше, "
+        "включающие время, уровень сообщения, сообщения. "
+        "Для сообщений WARNING и выше дополнительно должен выводиться путь к источнику события "
+        "(используется аргумент pathname в форматировании)."
+        " А для сообщений ERROR и CRITICAL еще должен выводить стэк ошибки "
+        "(аргумент exc_info). Сюда должны попадать все сообщения с основного логгера django."
         'console': {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
+        "В файл general.log должны выводиться сообщения уровня INFO"
+        " и выше только с указанием времени, уровня логирования, модуля,"
+        " в котором возникло сообщение (аргумент module) и само сообщение."
+        " Сюда также попадают сообщения с регистратора django."
         'general_file': {
             'level': 'INFO',
             'filters': ['require_debug_false'],
@@ -214,6 +225,11 @@ LOGGING = {
             'backupCount': 5,
             'formatter': 'verbose',
         },
+        "В файл errors.log должны выводиться сообщения только уровня ERROR и CRITICAL. "
+        "В сообщении указывается время, уровень логирования, "
+        "само сообщение, путь к источнику сообщения и стэк ошибки. "
+        "В этот файл должны попадать сообщения только из логгеров django.request, "
+        "django.server, django.template, django.db.backends."
         'errors_file': {
             'level': 'ERROR',
             'class': 'logging.handlers.RotatingFileHandler',
@@ -222,6 +238,9 @@ LOGGING = {
             'backupCount': 5,
             'formatter': 'verbose',
         },
+        "В файл security.log должны попадать только сообщения, связанные"
+        " с безопасностью, а значит только из логгера django.security. "
+        "Формат вывода предполагает время, уровень логирования, модуль и сообщение."
         'security_file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
@@ -230,6 +249,9 @@ LOGGING = {
             'backupCount': 5,
             'formatter': 'verbose',
         },
+        "На почту должны отправляться сообщения уровней "
+        "ERROR и выше из django.request и django.server по формату, "
+        "как в errors.log, но без стэка ошибок"
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
