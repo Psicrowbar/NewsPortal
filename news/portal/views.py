@@ -1,3 +1,5 @@
+import pytz
+from requests import Response
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from .models import Post, PostCategory,BaseRegisterForm, Author,Category
 from .forms import ProductForm
@@ -6,6 +8,12 @@ from django.views.generic import TemplateView
 from django.contrib.auth.models import User, Group
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.utils.translation import gettext as _  # импортируем функцию для перевода
+#from serializers import AuthorSerializer, PostSerializer
+from rest_framework import viewsets, permissions, status
+from django.utils.translation import gettext as _
+from django.utils import timezone
+#from django.utils.translation import activate, get_supported_language_variant, LANGUAGE_SESSION_KEY
 
 from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib.auth.decorators import login_required
@@ -18,6 +26,9 @@ def upgrade_me(request):
     if not request.user.groups.filter(name='premium').exists():
         authors_group.user_set.add(request.user)
     return redirect('/news/')
+# Create your views here.
+
+
 class ProtectedView(LoginRequiredMixin, TemplateView):
 
     template_name = 'protected_page.html'
@@ -33,6 +44,8 @@ class PostList(ListView):
         context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())  #вписываем фильтр в контекст
         context['categories'] = PostCategory.objects.all()
         context['form'] = ProductForm()
+        context['current_time'] = timezone.now()
+        context['timezones'] = pytz.common_timezones
         return context
 
     def post(self, request, *args, **kwargs):
@@ -153,3 +166,5 @@ def unsubscribe(request, pk):
     category.subscribers.remove(user)
     message = 'вы отписались от категории: '
     return render(request, 'subscribe.html', {'category': category, 'message': message})
+
+

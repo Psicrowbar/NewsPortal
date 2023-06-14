@@ -34,7 +34,6 @@ open(ERROR_LOG_FILE, 'a').close()
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-69-cnm=*xzl3+_=*bklua063ofz%(x4rgq4-*nqx$8ij2tnmzk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -45,7 +44,9 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale')
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -57,7 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
-
+    'modeltranslation',
     'portal',
     'protect',
     'django_filters',
@@ -66,6 +67,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'django_apscheduler',
+    'basic',
+    'rest_framework',
 ]
 SITE_ID = 1
 MIDDLEWARE = [
@@ -77,8 +80,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
-]
 
+    'django.middleware.locale.LocaleMiddleware',
+    'basic.middlewares.TimezoneMiddleware',
+]
+LANGUAGES = [
+    ('en-us', 'English'),
+    ('ru', 'Русский')
+]
 ROOT_URLCONF = 'news.urls'
 
 TEMPLATES = [
