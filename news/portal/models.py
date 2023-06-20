@@ -74,7 +74,7 @@ class Post(models.Model):
     post_title = models.CharField(max_length=30)
     post_text = models.TextField()
     post_rating = models.IntegerField(default=0)
-
+    is_active = models.BooleanField(default=True)
     def preview(self):
         self.post_text = self.post_text[0:125] + '...'
         self.save()

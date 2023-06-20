@@ -9,7 +9,7 @@ from django.contrib.auth.models import User, Group
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.utils.translation import gettext as _  # импортируем функцию для перевода
-#from serializers import AuthorSerializer, PostSerializer
+from .serializers import AuthorSerializer, PostSerializer
 from rest_framework import viewsets, permissions, status
 from django.utils.translation import gettext as _
 from django.utils import timezone
@@ -168,3 +168,20 @@ def unsubscribe(request, pk):
     return render(request, 'subscribe.html', {'category': category, 'message': message})
 
 
+class AuthorlViewset(viewsets.ModelViewSet):
+   queryset = Author.objects.all()
+   serializer_class = AuthorSerializer
+
+   def list(self, request, format=None):
+       return Response([])
+
+
+class PostViewset(viewsets.ModelViewSet):
+   queryset = Post.objects.all().filter(is_active=True)
+   serializer_class = PostSerializer
+
+   def destroy(self, request, pk, format=None):
+       instance = self.get_object()
+       instance.is_active = False
+       instance.save()
+       return Response(status=status.HTTP_204_NO_CONTENT)
